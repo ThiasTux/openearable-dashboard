@@ -279,7 +279,8 @@ class BLEManager {
 
             this.device = await navigator.bluetooth.requestDevice({
                 filters: [
-                    { namePrefix: "OpenEarable" }
+                    { namePrefix: "OE" },
+                     {namePrefix: "OpenEarable"}
                 ],
                 acceptAllDevices: false,
                 optionalServices: optionalServiceUUIDs
