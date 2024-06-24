@@ -56,4 +56,9 @@ $(document).ready(function () {
         // Reset the dropdowns to 0
         $('#sensorSamplingRate, #microphoneSamplingRate, #pressureSensorSamplingRate').val('0');
     });
+
+    $('#button-set-pdm-mic-gain').on('click', async function() {
+        var pdmMicGain = $('#pdmMicGainSelect').val();
+        await openEarable.pdmMicConfig.setGain(pdmMicGain);
+    })
 });

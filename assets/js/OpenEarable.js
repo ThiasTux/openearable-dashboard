@@ -126,6 +126,14 @@ const SERVICES = {
                 UUID: '566916a9-476d-11ee-be56-0242ac120002'
             }
         }
+    },
+    PDM_MIC_SERVICE: {
+        UUID: 'acda9f68-b698-4926-8da1-20dccb4b27fd',
+        CHARACTERISTICS: {
+            PDM_MIC_GAIN_CHARACTERISTIC: {
+                UUID: 'acda9f68-b698-4936-8da1-20dccb4b27fd'
+            }
+        }
     }
 }
 
@@ -136,7 +144,8 @@ class OpenEarable {
         this.sensorManager = new SensorManager(this.bleManager);
         this.rgbLed = new RGBLed(this.bleManager);
         this.audioPlayer = new AudioPlayer(this.bleManager);
-        this.buttonManager = new ButtonManager(this.bleManager)
+        this.buttonManager = new ButtonManager(this.bleManager);
+        this.pdmMicConfig = new PDMMicConfig(this.bleManager);
 
         // Attach event listeners for BLEManager
         this.bleManager.subscribeOnConnected(this.onDeviceReady.bind(this));
@@ -710,6 +719,45 @@ class AudioPlayer {
             SERVICES.AUDIO_SERVICE.CHARACTERISTICS.AUDIO_STATE_CHARACTERISTIC.UUID,
             data
         );  
+    }
+}
+
+class PDMMicConfig {
+    /**
+     * Create an AudioPlayer instance.
+     * @param {Object} bleManager - BLE manager to handle communications with the device.
+     */
+    constructor(bleManager) {
+        this.bleManager = bleManager;
+    }
+
+    async setGain(gain) {
+        try {
+            let data = this.prepareData(gain);
+
+            await this.bleManager.writeCharacteristic(
+                SERVICES.PDM_MIC_SERVICE.UUID,
+                SERVICES.PDM_MIC_SERVICE.CHARACTERISTICS.PDM_MIC_GAIN_CHARACTERISTIC.UUID,
+                data
+            );
+        } catch (error) {
+            log("Error setting gain for PDM Mic: " + error, "ERROR");
+        }
+    }
+
+    async getGain() {
+        this.bleManager.ensureConnected();
+        const value = await this.bleManager.readCharacteristic(
+            SERVICES.PDM_MIC_SERVICE.UUID,
+            SERVICES.PDM_MIC_SERVICE.CHARACTERISTICS.PDM_MIC_GAIN_CHARACTERISTIC.UUID
+        );
+        return value;
+    }
+
+    prepareData(gain) {
+        let data = new Uint8Array(1);
+        data[0] = gain;
+        return data;
     }
 }
 
