@@ -1,7 +1,7 @@
 # 🦻 OpenEarable - Dashboard v1.4.1
 [Open Dashboard ↗️](https://openearable.github.io/dashboard/)
 
-This repository offers a simplified version of the OpenEarable dashboard. The interface is meant to be used to control OpenEarable that are using firmware >= 1.4.0 from this [repo](https://github.com/ThiasTux/open-earable). A hosted version of this dashboard is available [here](https://thiastux.github.io/openearable-dashboard/). The dashboard offers the minimal functionalities to start/stop a data collection on the sensor SD card.
+This repository offers a simplified version of the OpenEarable dashboard. The interface is meant to be used to control OpenEarable that are using firmware >= 1.4.0 from this [repo](https://github.com/ThiasTux/open-earable). A hosted version of this dashboard is available [here](https://thiastux.github.io/openearable-dashboard/). The dashboard offers the minimal functionalities to start/stop a data collection on the sensor SD card. This version also supports the left/right naming of the Openearable (OELeft-XXXX/OERight-XXXX).
 
 This repository also includes the [OpenEarable.js](https://github.com/OpenEarable/dashboard#openearablejs-library) JavaScript library in the `assets/js/OpenEarable.js` folder. This way, researchers and developers can easily integrate OpenEarable into their own workflows.
 
