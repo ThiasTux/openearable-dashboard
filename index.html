@@ -205,9 +205,9 @@
                             <div class="card-text"><b></b><span id="connectedDevice" class=""
                                     style="font-family: monospace;">OpenEarable-XXXX </span> (<span id="batteryLevel"
                                     style="font-family: monospace;">XX</span><span style="font-size: 0.8em;">%<i
-                                        id="batteryChargingIndicator" class="bi bi-lightning-charge"></i><i 
-                                        style="color: #77F2A1"
-                                        id="batteryChargedIndicator" class="bi bi-lightning-charge-fill"></i></span>)
+                                        id="batteryChargingIndicator" class="bi bi-lightning-charge"></i><i
+                                        style="color: #77F2A1" id="batteryChargedIndicator"
+                                        class="bi bi-lightning-charge-fill"></i></span>)
                             </div>
                             <div class="mt-1"><b>Firmware</b> <span style="font-family: monospace"
                                     id="fwVersion">X.X.X</span> <b class="ms-2">Device</b> <span
@@ -227,7 +227,7 @@
                         <div class="d-flex flex-row w-100 justify-content-between">
                             <h5 class="card-title">Sensor Control</h5>
                             <div class="tooltip-indicator" data-toggle="tooltip"
-                                title="Enable and disable the sensors of OpenEarable. Note that sampling all sensors at the maximum sampling rate can lead to lag and/or audio play issues.">
+                                title="Enable and disable the sensors of OpenEarable. Note that sampling all sensors at the maximum sampling rate can lead to lag and/or audio play issues. Inner / outer microphone and gain control (gdB) only available with hardware and firmware verison >= 1.4.">
                                 <div>?</div>
                             </div>
                         </div>
@@ -287,19 +287,54 @@
                                 </div>
                                 <div class="ms-2"
                                     style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                    Microphone (written to SD card)
+                                    Microphone (recorded to microSD card)
                                 </div>
-                                <div>
-                                    <select disabled
-                                        class="w-100 is-connect-enabled ms-1 sampling-rate-input form-select"
-                                        name="microphoneSamplingRate" id="microphoneSamplingRate">
-                                        <option value="0">0</option>
-                                        <option value="16000">16,000</option>
-                                        <option value="41667">41,667</option>
-                                        <option value="62500">62,500</option>
-                                    </select>
+                                <div class="d-flex flex-row">
+                                    <div>
+                                        <select disabled
+                                            class="w-100 is-connect-enabled ms-1 sampling-rate-input form-select"
+                                            name="microphoneSamplingRate" id="microphoneSamplingRate">
+                                            <option value="0">0</option>
+                                            <option value="16000">16,000</option>
+                                            <option value="41667">41,667</option>
+                                            <option value="62500">62,500</option>
+                                        </select>
+
+                                    </div>
+
                                 </div>
                                 <div class="ms-1">Hz</div>
+
+
+
+                                <!-- Fourth Row -->
+                                <div class="d-flex flex-row 1-4-0-controls justify-content-between w-100 align-items-center"
+                                    style="grid-column: 1 / 5;">
+                                    <div class="1-4-0-controls">⌞</div>
+                                    <!-- inner mic -->
+                                    <input id="innerMicrophoneEnabled" type="checkbox" disabled
+                                        class="is-connect-enabled 1-4-0-controls ms-3"></input>
+                                    <div class="ms-2 1-4-0-controls">In&nbsp;</div>
+                                    <div class="ms-1 1-4-0-controls">gdB</div>
+                                    <select disabled
+                                        class="is-connect-enabled ms-1 sampling-rate-input form-select 1-4-0-controls "
+                                        name="microphoneGainInner" id="microphoneGainInner">
+                                        
+                                    </select>
+                                    <!-- outer mic -->
+                                    <input id="outerMicrophoneEnabled" type="checkbox" disabled
+                                        class="is-connect-enabled 1-4-0-controls ms-3"></input>
+                                    <div class="ms-2 1-4-0-controls">Out&nbsp;</div>
+                                    <div class="ms-1 1-4-0-controls">gdB</div>
+                                    <select disabled
+                                        class="is-connect-enabled ms-1 sampling-rate-input form-select 1-4-0-controls "
+                                        name="microphoneGainOuter" id="microphoneGainOuter">
+                                    </select>
+                                </div>
+
+
+
+
                             </div>
                             <!-- Grid Layout Ends Here -->
 
@@ -390,7 +425,8 @@
 
                         <div class="d-flex w-100 justify-content-between align-items-center mt-2">
                             <div>
-                                <button id="button-set-source" class="btn btn-control is-connect-enabled">Set Source</button>
+                                <button id="button-set-source" class="btn btn-control is-connect-enabled">Set
+                                    Source</button>
                                 <button id="button-play-audio" class="btn btn-play btn-block ms-2 is-connect-enabled"
                                     disabled><i class="bi bi-play"></i></button>
                                 <button id="button-pause-audio" class="btn btn-pause btn-block ms-2 is-connect-enabled"
@@ -648,6 +684,12 @@
     <script src="./assets/js/SensorManager.js"></script>
     <script>
         /* initialization tasks */
+
+        // Function to map dB values to linear values
+        function mapLinear(db, minDb, maxDb, minLinear, maxLinear) {
+            return (db - minDb) * (maxLinear - minLinear) / (maxDb - minDb) + minLinear;
+        }
+
         $(document).ready(function () {
             $('#batteryChargingIndicator').hide();
             $('#batteryChargedIndicator').hide();
@@ -666,6 +708,28 @@
             } else {
                 log('Your browser does not support WebBLE. Enable it or download a browser that supports WebBLE (e.g., Chrome version ≥ 56)!', "ERROR");
             }
+
+            const selectInner = document.getElementById('microphoneGainInner');
+            const selectOuter = document.getElementById('microphoneGainOuter');
+            const minDb = -20;
+            const maxDb = 20;
+            const step = 0.5;
+            const minLinear = 0;
+            const maxLinear = 80;
+
+            for (let db = minDb; db <= maxDb; db += step) {
+                const linearValue = mapLinear(db, minDb, maxDb, minLinear, maxLinear);
+                const option = document.createElement('option');
+                option.value = linearValue.toFixed(0);
+                option.textContent = `${db.toFixed(1)}`;
+                const option1 = document.createElement('option');
+                option1.value = linearValue.toFixed(0);
+                option1.textContent = `${db.toFixed(1)}`;
+                selectInner.appendChild(option);
+                selectOuter.appendChild(option1);
+            }
+            selectInner.selectedIndex = 40;
+            selectOuter.selectedIndex = 40;
         });
     </script>
 </body>
