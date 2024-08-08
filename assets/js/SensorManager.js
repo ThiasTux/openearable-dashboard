@@ -57,6 +57,8 @@ $(document).ready(function () {
                 await openEarable.sensorManager.writeSensorConfig(2, microphoneSamplingRate, gainSetting);
             } else if (openEarable.firmwareVersion === "1.3.0") {
                 await openEarable.sensorManager.writeSensorConfig(2, microphoneSamplingRate, 0);
+            } else {
+                await openEarable.sensorManager.writeSensorConfig(2, microphoneSamplingRate, 0);
             }
 
         } else {
