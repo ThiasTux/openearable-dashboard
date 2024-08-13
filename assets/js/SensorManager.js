@@ -36,7 +36,7 @@ $(document).ready(function () {
         if ($('#isMicEnabled').is(':checked')) {
             var microphoneSamplingRate = $('#microphoneSamplingRate').val();
             log("Setting sampling rate for microphone: " + microphoneSamplingRate + " Hz");
-            if (openEarable.firmwareVersion === "1.4.0") {
+            if (openEarable.firmwareVersion === "1.4.0" || openEarable.firmwareVersion === "1.4.1") {
                 // set gain negative to disable mic
                 var gainInner = -1;
                 var gainOuter = -1;
