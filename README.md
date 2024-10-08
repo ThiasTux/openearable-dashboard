@@ -1,16 +1,16 @@
-# 🦻 OpenEarable - Dashboard v1.4.1
-[Open Dashboard ↗️](https://thiastux.github.io/openearable-dashboard/)
+# 🦻 OpenEarable - Dashboard v1.4.0
+[Open Dashboard ↗️](https://openearable.github.io/dashboard/)
 
 This repository offers a simplified version of the OpenEarable dashboard. The interface is meant to be used to control OpenEarable that are using firmware >= 1.4.0 from this [repo](https://github.com/ThiasTux/open-earable). A hosted version of this dashboard is available [here](https://thiastux.github.io/openearable-dashboard/). The dashboard offers the minimal functionalities to start/stop a data collection on the sensor SD card. This version also supports the left/right naming of the Openearable (OELeft-XXXX/OERight-XXXX).
 
 This repository also includes the [OpenEarable.js](https://github.com/OpenEarable/dashboard#openearablejs-library) JavaScript library in the `assets/js/OpenEarable.js` folder. This way, researchers and developers can easily integrate OpenEarable into their own workflows.
 
-<kbd> <br> [Get OpenEarable device now!](https://forms.gle/R3LMcqtyKwVH7PZB9) <br> </kbd>
+<kbd> <br> [Get OpenEarable device now!](https://open-earable.teco.edu/) <br> </kbd>
 
 ## Usage
 The dashboard runs directly in your browser. You can connect to OpenEarable without having to install anything as it works via WebBLE (latest Chrome version is recommended).
 
-<img src="assets/images/screenshot.jpg" style="width: 100%;">
+https://github.com/OpenEarable/dashboard/assets/11386075/e9e2a116-a4f6-42e4-9f19-0ce223112ff2
 
 
 If you want to run the dashboard yourself and have python3 installed, you can use the following command to run the website from the root of this repository. This will start the webserver at `http://localhost:8000`.

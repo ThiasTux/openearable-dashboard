@@ -15,9 +15,6 @@ var colors = {
     'temperatureSensorChart': ['#FFA07A']                      // Light Salmon
 };
 
-var wavFileData = undefined;
-
-
 var units = ['m/s\u00B2', '°/s', 'µT', 'Pa', '°C'];
 
 var charts = [];
@@ -155,9 +152,85 @@ function updateOrientation(acc, gyro, mag) {
     modelViewerElement.setAttribute('orientation', `${rpy.pitch}deg ${-rpy.roll}deg ${0}deg`);
 }
 
+var recordMic = false;
+var rawData = [];
+
+function createWavFileAndDownload(data) {
+    // Convert rawData to WAV format
+    var wavData = convertToWav(data); // Implement this function based on your needs
+
+    // Create a Blob and trigger a download
+    var blob = new Blob([wavData], { type: 'audio/wav' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'recording.wav';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function convertToWav(rawData) {
+    // Implement conversion from raw byte data to WAV format
+    // This involves creating a WAV header and concatenating it with raw audio data
+    // Here's a basic outline of what this might look like:
+    var sampleRate = 2000; // Replace with actual sample rate
+    var numChannels = 1; // Replace with number of channels (1 for mono, 2 for stereo)
+    var bitsPerSample = 16; // Replace with actual bit depth
+
+    var header = createWavHeader(rawData.length, sampleRate, numChannels, bitsPerSample);
+    return new Uint8Array([...header, ...rawData]);
+}
+
+function createWavHeader(dataLength, sampleRate, numChannels, bitsPerSample) {
+    var byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+    var blockAlign = numChannels * (bitsPerSample / 8);
+
+    var header = new Uint8Array(44);
+    var view = new DataView(header.buffer);
+
+    // RIFF chunk descriptor
+    header.set([82, 73, 70, 70], 0); // "RIFF"
+    view.setUint32(4, 36 + dataLength, true); // Chunk size (data length + 36)
+    header.set([87, 65, 86, 69], 8); // "WAVE"
+
+    // fmt sub-chunk
+    header.set([102, 109, 116, 32], 12); // "fmt "
+    view.setUint32(16, 16, true); // Subchunk1 size (16 for PCM)
+    view.setUint16(20, 1, true); // Audio format (1 for PCM)
+    view.setUint16(22, numChannels, true); // Number of channels
+    view.setUint32(24, sampleRate, true); // Sample rate
+    view.setUint32(28, byteRate, true); // Byte rate
+    view.setUint16(32, blockAlign, true); // Block align
+    view.setUint16(34, bitsPerSample, true); // Bits per sample
+
+    // data sub-chunk
+    header.set([100, 97, 116, 97], 36); // "data"
+    view.setUint32(40, dataLength, true); // Data chunk size
+
+    return header;
+}
+
+function printDataViewAsUint16List(dataView) {
+    const length = dataView.byteLength;
+    const uint16Array = [];
+    
+    // Iterate through the DataView in steps of 2 bytes
+    for (let i = 0; i < length; i += 2) {
+        uint16Array.push(dataView.getUint16(i));
+    }
+    
+    console.log(uint16Array);
+}
+
 openEarable.sensorManager.subscribeOnSensorDataReceived((sensorData) => {
-    if (sensorId === SENSOR_ID.MICROPHONE) {
-        console.log(sensorId.rawByteData)
+    if (sensorData.sensorId === SENSOR_ID.MICROPHONE) {
+        if (recordMic) {
+            // Drop the first 8 bytes and append the rest
+            for (let i = 6; i < sensorData.rawByteData.byteLength; i++) {
+                rawData.push(sensorData.rawByteData.getUint8(i));
+            }
+            printDataViewAsUint16List(sensorData.rawByteData);
+        }
     }
 
     switch (sensorData.sensorId) {
