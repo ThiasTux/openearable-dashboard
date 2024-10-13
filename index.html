@@ -720,7 +720,7 @@
             const selectOuter = document.getElementById('microphoneGainOuter');
             const minDb = -20;
             const maxDb = 20;
-            const step = 0.5;
+            const step = 2;
             const minLinear = 0;
             const maxLinear = 80;
 
@@ -735,8 +735,8 @@
                 selectInner.appendChild(option);
                 selectOuter.appendChild(option1);
             }
-            selectInner.selectedIndex = 40;
-            selectOuter.selectedIndex = 40;
+            selectInner.selectedIndex = 10;
+            selectOuter.selectedIndex = 10;
         });
     </script>
 </body>
