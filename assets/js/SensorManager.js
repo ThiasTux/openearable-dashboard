@@ -69,23 +69,21 @@ $(document).ready(function () {
     });
 
     $('#preloadWalkParams').on('click', async function () {
-        $('#areSensorsEnabled, #isMicEnabled, #isPressureSensorEnabled, #innerMicrophoneEnabled, #outerMicrophoneEnabled').prop('checked', true)
+        $('#areSensorsEnabled, #isMicEnabled, #innerMicrophoneEnabled, #outerMicrophoneEnabled').prop('checked', true)
 
         // Preset the sensor values
-        $('#sensorSamplingRate').val('100')
-        $('#microphoneSamplingRate').val('41667')
-        $('#pressureSensorSamplingRate').val('10');
+        $('#sensorSamplingRate').val('100');
+        $('#microphoneSamplingRate').val('16000');
         $('#microphoneGainInner').val('80');
         $('#microphoneGainOuter').val('80');
     });
 
     $('#preloadRunParams').on('click', async function () {
-        $('#areSensorsEnabled, #isMicEnabled, #isPressureSensorEnabled, #innerMicrophoneEnabled, #outerMicrophoneEnabled').prop('checked', true)
+        $('#areSensorsEnabled, #isMicEnabled, #innerMicrophoneEnabled, #outerMicrophoneEnabled').prop('checked', true)
 
         // Preset the sensor values
-        $('#sensorSamplingRate').val('100')
-        $('#microphoneSamplingRate').val('41667')
-        $('#pressureSensorSamplingRate').val('10');
+        $('#sensorSamplingRate').val('100');
+        $('#microphoneSamplingRate').val('16000');
         $('#microphoneGainInner').val('40');
         $('#microphoneGainOuter').val('40');
     });
