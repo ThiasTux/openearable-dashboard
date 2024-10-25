@@ -68,6 +68,28 @@ $(document).ready(function () {
         }
     });
 
+    $('#preloadWalkParams').on('click', async function () {
+        $('#areSensorsEnabled, #isMicEnabled, #isPressureSensorEnabled, #innerMicrophoneEnabled, #outerMicrophoneEnabled').prop('checked', true)
+
+        // Preset the sensor values
+        $('#sensorSamplingRate').val('100')
+        $('#microphoneSamplingRate').val('41667')
+        $('#pressureSensorSamplingRate').val('10');
+        $('#microphoneGainInner').val('80');
+        $('#microphoneGainOuter').val('80');
+    });
+
+    $('#preloadRunParams').on('click', async function () {
+        $('#areSensorsEnabled, #isMicEnabled, #isPressureSensorEnabled, #innerMicrophoneEnabled, #outerMicrophoneEnabled').prop('checked', true)
+
+        // Preset the sensor values
+        $('#sensorSamplingRate').val('100')
+        $('#microphoneSamplingRate').val('41667')
+        $('#pressureSensorSamplingRate').val('10');
+        $('#microphoneGainInner').val('40');
+        $('#microphoneGainOuter').val('40');
+    });
+
     $('#testOcclusionButton').on('click', async function () {
         recordMic = !recordMic; // Toggle recording state
 
