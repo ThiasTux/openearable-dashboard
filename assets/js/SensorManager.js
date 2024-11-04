@@ -74,8 +74,8 @@ $(document).ready(function () {
         // Preset the sensor values
         $('#sensorSamplingRate').val('100');
         $('#microphoneSamplingRate').val('16000');
-        $('#microphoneGainInner').val('80');
-        $('#microphoneGainOuter').val('80');
+        $('#microphoneGainInner').val('60');
+        $('#microphoneGainOuter').val('60');
     });
 
     $('#preloadRunParams').on('click', async function () {
@@ -84,8 +84,8 @@ $(document).ready(function () {
         // Preset the sensor values
         $('#sensorSamplingRate').val('100');
         $('#microphoneSamplingRate').val('16000');
-        $('#microphoneGainInner').val('40');
-        $('#microphoneGainOuter').val('40');
+        $('#microphoneGainInner').val('48');
+        $('#microphoneGainOuter').val('48');
     });
 
     $('#testOcclusionButton').on('click', async function () {
