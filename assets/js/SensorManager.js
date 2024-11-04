@@ -14,6 +14,8 @@ $(document).ready(function () {
     $('#setSensorConfigurationButton').on('click', async function () {
         // Check if the checkbox for the first set of sensors is checked
         if ($('#areSensorsEnabled').is(':checked')) {
+            $('#setSensorConfigurationButton').prop('disabled', true);
+
             var sensorSamplingRate = $('#sensorSamplingRate').val();
             log("Setting sampling rate for IMU: " + sensorSamplingRate + " Hz")
             await openEarable.sensorManager.writeSensorConfig(0, sensorSamplingRate, 0);
@@ -24,6 +26,8 @@ $(document).ready(function () {
         }
 
         if ($('#isPressureSensorEnabled').is(':checked')) {
+            $('#setSensorConfigurationButton').prop('disabled', true);
+
             var pressureSensorSamplingRate = $('#pressureSensorSamplingRate').val();
             log("Setting sampling rate for pressure sensor: " + pressureSensorSamplingRate + " Hz")
             await openEarable.sensorManager.writeSensorConfig(1, pressureSensorSamplingRate, 0);
@@ -34,6 +38,8 @@ $(document).ready(function () {
 
         // Check if the checkbox for the microphone is checked
         if ($('#isMicEnabled').is(':checked')) {
+            $('#setSensorConfigurationButton').prop('disabled', true);
+
             var microphoneSamplingRate = $('#microphoneSamplingRate').val();
             log("Setting sampling rate for microphone: " + microphoneSamplingRate + " Hz");
             if (openEarable.firmwareVersion === "1.4.0" || openEarable.firmwareVersion === "1.4.1") {
@@ -154,11 +160,18 @@ $(document).ready(function () {
         }
     });
 
-    $('.btn-disable-sensors').on('click', async function () {
+    $('#turnOffSensors').on('click', async function () {
+        $(".is-connect-enabled").prop('disabled', false);
+
         // Set the sampling rate to 0 for all sensors
         await openEarable.sensorManager.writeSensorConfig(0, 0, 0);
+        log("Setting IMU disabled.");
+
         await openEarable.sensorManager.writeSensorConfig(1, 0, 0);
+        log("Setting pressure sensor disabled.")
+
         await openEarable.sensorManager.writeSensorConfig(2, 0, 0);
+        log("Setting microphone disabled.");
 
         // Uncheck the checkboxes
         $('#areSensorsEnabled, #isMicEnabled, #isPressureSensorEnabled, #innerMicrophoneEnabled, #outerMicrophoneEnabled').prop('checked', false);
@@ -167,6 +180,7 @@ $(document).ready(function () {
         $('#sensorSamplingRate, #microphoneSamplingRate, #pressureSensorSamplingRate').val('0');
         $('#microphoneGainInner').val('40');
         $('#microphoneGainOuter').val('40');
+
     });
 
     $('#isMicEnabled').on('change', function () {
