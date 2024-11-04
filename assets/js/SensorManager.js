@@ -154,7 +154,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.btn-disable-sensors').on('click', async function () {
+    $('#turnOffSensors').on('click', async function () {
         // Set the sampling rate to 0 for all sensors
         await openEarable.sensorManager.writeSensorConfig(0, 0, 0);
         await openEarable.sensorManager.writeSensorConfig(1, 0, 0);
@@ -167,6 +167,10 @@ $(document).ready(function () {
         $('#sensorSamplingRate, #microphoneSamplingRate, #pressureSensorSamplingRate').val('0');
         $('#microphoneGainInner').val('40');
         $('#microphoneGainOuter').val('40');
+
+        log("Setting sampling rate for IMU: 0 Hz");
+        log("Setting sampling rate for microphone: 0 Hz");
+        log("Setting sampling rate for pressure sensor: 0 Hz");
     });
 
     $('#isMicEnabled').on('change', function () {
