@@ -90,8 +90,8 @@ $(document).ready(function () {
         // Preset the sensor values
         $('#sensorSamplingRate').val('100');
         $('#microphoneSamplingRate').val('16000');
-        $('#microphoneGainInner').val('48');
-        $('#microphoneGainOuter').val('48');
+        $('#microphoneGainInner').val('20');
+        $('#microphoneGainOuter').val('40');
     });
 
     $('#testOcclusionButton').on('click', async function () {
