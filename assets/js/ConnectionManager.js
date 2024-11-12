@@ -19,6 +19,7 @@ openEarable.bleManager.subscribeOnConnected(async () => {
     })
 
     $('#disconnectDeviceButton').prop('disabled', false);
+    $(".is-connect-enabled").prop('disabled', false);
 
     // Update the DOM with the obtained values
     $('#fwVersion').text(firmwareVersion);
@@ -49,7 +50,7 @@ openEarable.bleManager.subscribeOnDisconnected(() => {
 openEarable.subscribeBatteryLevelChanged((batteryLevel) => {
     $('#connectDeviceButton').hide()
     $('#disconnectDeviceButton').show()
-    $(".is-connect-enabled").prop('disabled', false);
+    // $(".is-connect-enabled").prop('disabled', false);
 
     $('#batteryLevel').text(batteryLevel);
     $('#batteryLevel').show();
